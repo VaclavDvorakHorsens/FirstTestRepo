@@ -1,0 +1,3 @@
+vasek dvorak,1,goalkeeper
+michal dvorak,2,defender
+tomas dvorak,3,forward 
