@@ -25,6 +25,20 @@ public class ListOfPlayers implements Serializable
       return null;
    }
    
+   public Player get(int index)
+   {
+      if(index<players.size())
+      {
+         return players.get(index);
+      }
+      else
+      {
+         return null;
+      }
+   }
+   
+   
+   
    public ArrayList<Player> getAllPlayers()
    {
       return players;

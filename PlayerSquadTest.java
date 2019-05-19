@@ -14,10 +14,21 @@ public class PlayerSquadTest
       listOfPlayers1.addPlayer(player3);*/
       
       
-      Squad squad1 = new Squad(1,"1.1.2000","12:01","cup","Slavia");
+      /* Squad squad1 = new Squad(1,"1.1.2000","12:01","cup","Slavia");
       squad1.addPlayers(player1);
       squad1.addPlayers(player2);
-      System.out.println(squad1.toString());
+      System.out.println(squad1.toString());*/
+      PlayersSquadFileAdapter adapterPlayers=new PlayersSquadFileAdapter("C:\\Vasek\\players.bin");
+      ListOfPlayers players = adapterPlayers.getAllPlayers();
+      System.out.println(players.toString());
+      adapterPlayers.changePlayer("ggg", "1", "TTT", true);
+      PlayersSquadFileAdapter adapterPlayers1=new PlayersSquadFileAdapter("C:\\Vasek\\players.bin");
+      ListOfPlayers players1 = adapterPlayers1.getAllPlayers();
+      System.out.println(players1.toString());
+      
+      
+      
+      
       
    }
 

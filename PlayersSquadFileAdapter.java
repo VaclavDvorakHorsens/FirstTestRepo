@@ -59,5 +59,44 @@ public class PlayersSquadFileAdapter
       return squads;
    }
    
+   public void savePlayers(ListOfPlayers players)
+   {
+      try
+      {
+         mfio.writeToFile(fileName, players);
+      }
+      catch (FileNotFoundException e)
+      {
+         System.out.println("File not found");
+      }
+      catch (IOException e)
+      {
+         System.out.println("IO Error writing to file");
+      }
+   }
+ 
+   
+   
+   
+   public void changePlayer(String playerName, String playerNumber, String playerPosition, boolean ifInjured)
+   {
+      ListOfPlayers players = getAllPlayers();
+
+      for (int i = 0; i < players.size(); i++)
+      {
+         Player player = players.get(i);
+         int intPlayerNumber = Integer.parseInt(playerNumber);
+
+         if (player.getNumber()==intPlayerNumber)
+         {
+            player.setName(playerName);
+            player.setPosition(playerPosition);
+            player.setIfInjured(ifInjured);
+         }
+      }
+
+      savePlayers(players);
+   }
+
    
 }

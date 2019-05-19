@@ -98,7 +98,7 @@ public class Squad implements Serializable
   
   public String toString()
   {
-     String SquadList=date+time+opponent+fieldPlayers+benchPlayers+"\n";
+     String SquadList=date+ " " +time+ " " +opponent+ " "+matchType+" "+"FieldPlayers: " +fieldPlayers+ " "+"BenchPlayers: " +benchPlayers+"\n";
      for(int i=0;i<players.size();i++)
      {
         SquadList+=players.get(i).toString();

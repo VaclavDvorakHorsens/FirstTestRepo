@@ -24,6 +24,7 @@ public class LoadInitialData
               String name = tempArr[0];
               int number = Integer.parseInt(tempArr[1]);
               String position = tempArr[2];
+              
               players.addPlayer(new Player(name, number, position));
             }
             

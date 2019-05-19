@@ -1,9 +1,11 @@
 package Vasek_FirstSemesterProject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Player implements Serializable
 {
+  
 private String name;
 private int number;
 private String position;
@@ -13,6 +15,8 @@ private boolean ifInjured;
 
 public Player(String name, int number, String position)
    {
+      
+      
       this.name=name;
       this.number=number;
       this.position=position;
@@ -86,7 +90,10 @@ public boolean numberEquals(Object obj)
 
 public String toString()
 {
-   return name + number + position + ifSuspended + suspendedForMatches + ifInjured;
+   return name + " " +"Number: " + number + " "+ "Position: " + position+" "+"Suspended: "+ " " + ifSuspended + " "+"ForHowManyMatches: " + suspendedForMatches + " "+"Injured: " + ifInjured;
 }
+
+
+
 
 }
