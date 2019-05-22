@@ -6,6 +6,8 @@ import java.util.ArrayList;
 public class ListOfPlayers implements Serializable
 {
    
+   // test comment to see if git works
+   
    private ArrayList<Player> players;
    
    public ListOfPlayers()

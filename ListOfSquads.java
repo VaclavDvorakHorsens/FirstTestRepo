@@ -6,6 +6,7 @@ import java.util.ArrayList;
 public class ListOfSquads implements Serializable
 {
   
+   // another comment
    private ArrayList<Squad> squads;
    
    public ListOfSquads()
