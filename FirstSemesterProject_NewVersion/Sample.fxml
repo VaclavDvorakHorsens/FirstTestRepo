@@ -32,6 +32,21 @@
                         </AnchorPane>
                     </content>
                   </Tab>
+  		<Tab fx:id="createPlayerTab" text="Create Player">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <TextField fx:id="createPlayerName" layoutX="212.0" layoutY="92.0" />
+                              <Label layoutX="98.0" layoutY="97.0" text="Player Name" />
+                              <TextField fx:id="createPlayerNumber" layoutX="212.0" layoutY="152.0" />
+                              <TextField fx:id="createPlayerPosition" layoutX="212.0" layoutY="210.0" />
+                              <Label layoutX="98.0" layoutY="157.0" text="Player Number" />
+                              <Label layoutX="99.0" layoutY="215.0" text="Player Position" />
+                              <Button fx:id="createNewPlayer" layoutX="98.0" layoutY="296.0" mnemonicParsing="false" onAction="#MyActionListener" text="CreateNewPlayer" />
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </Tab>
                 <Tab fx:id="changePlayersTab" onSelectionChanged="#MyTabListener" text="Edit Player">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="386.0" prefWidth="602.0">
@@ -67,6 +82,7 @@
                         </AnchorPane>
                     </content>
                   </Tab>
+                
               </tabs>
             </TabPane>
             <TabPane layoutX="870.0" layoutY="256.0" onMouseClicked="#MyActionListener" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" />
@@ -84,3 +100,4 @@
       </Pane>
    </center>
 </BorderPane>
+         
