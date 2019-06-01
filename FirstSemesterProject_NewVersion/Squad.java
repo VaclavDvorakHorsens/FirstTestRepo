@@ -53,28 +53,36 @@ public class Squad implements Serializable
     * @author Vaclav Dvorak
     * @version 1.0
     */
-   public void addPlayers(Player player)
+   public boolean addPlayers(Player player)
    {
       if(matchType.equals("league") && benchPlayers<=4 && fieldPlayers<=11)
       {
          players.add(player);
          fieldPlayers++;
+         return false;
       }
       else if(matchType.equals("league") && benchPlayers<=4)
       {
          players.add(player);
          benchPlayers++;
+         return false;
       }
       else if(matchType.equals("cup") || matchType.equals("friendly") && benchPlayers<=5 && fieldPlayers<=11)
       {
          players.add(player);
          fieldPlayers++;
+         return false;
       }
-      else if(matchType.equals("cup") || matchType.equals("friendly") && benchPlayers<=5)
+      else if(matchType.equals("cup") || matchType.equals("friendly") && benchPlayers<=11)
       {
          players.add(player);
          benchPlayers++;
+         return false;
       }  
+      else 
+         {
+         return true;
+         }
    }
    
    

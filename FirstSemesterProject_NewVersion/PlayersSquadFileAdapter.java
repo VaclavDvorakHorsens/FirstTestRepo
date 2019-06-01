@@ -91,7 +91,7 @@ public class PlayersSquadFileAdapter
    
    /**
     * Sends ListOfPlayers into object of MyFileIO class (which eventually ends with saving the ListOfPlayers)
-    * @param receives players (object including arraylist with players)
+    * @param receives players (object including ArrayList with players)
     * @author Vaclav Dvorak
     * @version 1.0
     */
@@ -100,6 +100,29 @@ public class PlayersSquadFileAdapter
       try
       {
          mfio.writeToFile(fileName, players);
+      }
+      catch (FileNotFoundException e)
+      {
+         System.out.println("File not found");
+      }
+      catch (IOException e)
+      {
+         System.out.println("IO Error writing to file");
+      }
+   }
+   
+   
+   /**
+    * Sends ListOfSquadsinto object of MyFileIO class (which eventually ends with saving the ListOfSquads)
+    * @param receives players (object including ArrayList with squads)
+    * @author Vaclav Dvorak
+    * @version 1.0
+    */
+   public void saveSquads(ListOfSquads squads)
+   {
+      try
+      {
+         mfio.writeToFile(fileName, squads);
       }
       catch (FileNotFoundException e)
       {
@@ -214,4 +237,24 @@ public class PlayersSquadFileAdapter
       savePlayers(players);
    }
 
+   
+   
+   /**
+    * creates a new Player in ListOfPlayers and then saves ListOfPlayers
+    * @param receives Player's: Name, Number, Position 
+    * @author Vaclav Dvorak
+    * @version 1.0
+    */
+   public void createNewSquad(String createSqMatchDate, String createSqmatchTime, String createSqMatchOpponent, String createSqMatchIndex,String createSqTypeMatch)
+   {
+      ListOfSquads squads = getAllSquads();
+      int intSquadindex = Integer.parseInt(createSqMatchIndex);
+      
+      Squad newSquad = new Squad(intSquadindex, createSqMatchDate, createSqmatchTime, createSqMatchOpponent,createSqTypeMatch);
+      squads.addSquad(newSquad);
+      saveSquads(squads);
+   }
+   
+   
+   
 }
