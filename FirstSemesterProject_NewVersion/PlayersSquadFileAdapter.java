@@ -132,6 +132,7 @@ public class PlayersSquadFileAdapter
       {
          System.out.println("IO Error writing to file");
       }
+      System.out.print(squads.toString());
    }
  
    
@@ -245,12 +246,12 @@ public class PlayersSquadFileAdapter
     * @author Vaclav Dvorak
     * @version 1.0
     */
-   public void createNewSquad(String createSqMatchDate, String createSqmatchTime, String createSqMatchOpponent, String createSqMatchIndex,String createSqTypeMatch)
+   public void createNewSquad(String createSqMatchDate, String createSqmatchTime, String createSqMatchOpponent, String createSqMatchIndex,String createSqTypeMatch, int fieldPlayers, int benchPlayers)
    {
       ListOfSquads squads = getAllSquads();
       int intSquadindex = Integer.parseInt(createSqMatchIndex);
       
-      Squad newSquad = new Squad(intSquadindex, createSqMatchDate, createSqmatchTime, createSqMatchOpponent,createSqTypeMatch);
+      Squad newSquad = new Squad(intSquadindex, createSqMatchDate, createSqmatchTime, createSqMatchOpponent,createSqTypeMatch,fieldPlayers,benchPlayers);
       squads.addSquad(newSquad);
       saveSquads(squads);
    }

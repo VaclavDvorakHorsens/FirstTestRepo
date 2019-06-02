@@ -52,39 +52,7 @@ public class MyFileIO
          }
       }
      
-   /*// Writes the objects in the given array to a file with the given file name
-      public void writeToFile(String fileName, Object[] objs) throws IOException
-      {
-         ObjectOutputStream writeToFile = null;
-         try
-         {
-            FileOutputStream fileOutputStream = new FileOutputStream(fileName);
-            writeToFile = new ObjectOutputStream(fileOutputStream);
-            
-            for(int i=0;i<objs.length;i++)
-               {
-               writeToFile.writeObject(objs[i]);
-               }
-         }
-       finally
-       {
-          if(writeToFile !=null)
-          {
-             try
-             {
-                writeToFile.close();
-             }
-             catch(IOException e)
-             {
-                System.out.println("IO Error closing file " + fileName); 
-             }
-          } 
-       }
-      }
-      
-      */
-      // Reads the first object from the file with the given file name and returns it.
-      // Whoever calls the method will need to cast it from type Object to its real type
+
       
       
       /**

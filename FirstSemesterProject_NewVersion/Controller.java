@@ -1,6 +1,10 @@
 package application;
 
+import java.awt.Window;
 import java.util.ArrayList;
+
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javafx.event.ActionEvent;
@@ -26,16 +30,16 @@ public class Controller
    @FXML private Tab createPlayerTab;
    @FXML private Tab createSquadTab;
    @FXML private ComboBox<String> playerBox;
-   @FXML private ComboBox<String> squadBox;
+   @FXML private ComboBox<String> typeOfMatchBox;
    @FXML private ComboBox<String> playerToSquadBox;
    @FXML private TextArea allSquadsArea;
    @FXML private TextArea allPlayersArea;
-   @FXML private TextArea allPlayersSquadArea;
+   @FXML private TextArea allFieldPlayersSquadArea;
+   @FXML private TextArea allBenchPlayersSquadArea;
    @FXML private Button updatePlayer;
    @FXML private Button deletePlayer;
    @FXML private Button createNewPlayer;
    @FXML private Button createNewSquad;
-
    @FXML private TextField PlayerName;
    @FXML private TextField forHowManyDays;
    @FXML private TextField PlayerNumber;
@@ -58,7 +62,12 @@ public class Controller
    
    private PlayersSquadFileAdapter adapterPlayers;
    private PlayersSquadFileAdapter adapterSquads;
-   private Squad tempSquad = new Squad(1, "1.1.1900", "0:00", "matchType", "opponent");
+   private Squad tempSquad = new Squad(1, "1.1.1900", "0:00", "matchType", "opponent",0,0);
+   private JPanel panel = new JPanel();
+
+
+   
+   
    
    
  
@@ -100,15 +109,13 @@ public class Controller
    
    
    /**
-    * shows actual players names in Combobox
+    * shows matchType values in typeOfMatch Combobox
     * @author Vaclav Dvorak
     * @version 1.0
     */
-
-   
-   private void updateSquadBox()
+   private void updateTypeOfMatchSquadBox()
    {
-      squadBox.getItems().clear();
+      typeOfMatchBox.getItems().clear();
 
       ArrayList <String> typeOfMatch = new ArrayList <String>();
       typeOfMatch.add("league");
@@ -117,14 +124,21 @@ public class Controller
    
          for (int i = 0; i < typeOfMatch.size(); i++)
          {
-            squadBox.getItems().add(typeOfMatch.get(i));
-         } 
+            typeOfMatchBox.getItems().add(typeOfMatch.get(i));
+         }    
    }
    
    
+   
+   /**
+    * shows actual players names in Comboboxes in both EditPlayer and CreateSquad tabs
+    * @author Vaclav Dvorak
+    * @version 1.0
+    */
    private void updatePlayerBox()
    {
       playerBox.getItems().clear();
+      playerToSquadBox.getItems().clear();
 
       ListOfPlayers players = adapterPlayers.getAllPlayers();
       ArrayList<String> PlayersNames = new ArrayList<String>();
@@ -145,25 +159,46 @@ public class Controller
     * @author Vaclav Dvorak
     * @version 1.0
     */
-      public void MyTabListener(Event ev)
+      public void MyTabListener(Event ev)   // functionalities called while switching tabs
       {
-         if (allPlayersTab.isSelected())
+       
+         if (allPlayersTab.isSelected()) // if user switches to AllPlayers tab, then all players are shown
          {   
             updatePlayersArea();   
          }
-         else if (allSquadsTab.isSelected())
+         else if (createPlayerTab.isSelected())//if user switches to CreatePlayer tab, system clears form field values
+         {
+            createPlayerName.setText("");
+            createPlayerNumber.setText("");
+            createPlayerPosition.setText("");  
+         }
+         else if (changePlayersTab.isSelected()) //if user switches to EditPlayer tab,system updates combobox and clearing form field values
+         {
+            updatePlayerBox();
+            PlayerName.setText("");
+            PlayerNumber.setText("");
+            PlayerPosition.setText("");
+            SuspendedForHowManyMatches.setText("");
+            ifInjuredNo.setSelected(true);
+            ifSuspended.setSelected(false);
+         } 
+         else if (allSquadsTab.isSelected())// if user switches to AllSquads tab, then all squads are shown
          {
             updateSquadsArea();
          }
-         else if (changePlayersTab.isSelected())
+       
+         else if (createSquadTab.isSelected())//if user switches to CreateSquad tab,system updates comboboxes and clears form field values
          {
+            updateTypeOfMatchSquadBox();
             updatePlayerBox();
-         }  
-         else if (createSquadTab.isSelected())
-         {
-            updateSquadBox();
-            updatePlayerBox();
+            createSquadIndex.setText("");
+            createSquadDate.setText("");
+            createSquadTime.setText("");
+            createSquadOpponent.setText("");
+            allFieldPlayersSquadArea.setText("");
+            allBenchPlayersSquadArea.setText("");  
          }
+       
       }
   
 
@@ -174,13 +209,11 @@ public class Controller
        */
       public void MyActionListener(ActionEvent e)
       {
-         /*Squad tempSquad = new Squad(1, "1.1.1900", "0:00", "matchType", "opponent");*/
-         
-        if(e.getSource() == updatePlayer) //when SavingChanges of Player 
+        if(e.getSource() == updatePlayer) //when clicking on SaveChanges button on EditPlayer tab
          {   
             String playerName = PlayerName.getText(); 
             String playerNumber = PlayerNumber.getText();
-                  if(playerNumber.equals(""))
+                  if(playerNumber.equals("")) //so NullPointer exception would not occur later when calling methods for the value of this field
                   {
                   playerNumber="0";
                   }
@@ -188,46 +221,56 @@ public class Controller
             boolean ifInjured = ifInjuredYes.isSelected();
             boolean ifIsSuspended = ifSuspended.isSelected();
             String ForHowManyDays = SuspendedForHowManyMatches.getText();
-                  if(ForHowManyDays.equals(""))
+                 if(ForHowManyDays.equals("")) //to keep number format
                   {
                      ForHowManyDays="0";
                   }
             
-           
+            //System checks, that Player Number has specific format and if not, shows validation
             if(adapterPlayers.comparePlayerNumber(playerNumber, playerName)==true)
-            {
-               final JPanel panel = new JPanel();
-               JOptionPane.showMessageDialog(panel, "The Player Number has been already assigned to another player","Error", JOptionPane.ERROR_MESSAGE); 
+            {  
+              JOptionPane.showMessageDialog(panel, "The Player Number has been already assigned to another player","Error", JOptionPane.ERROR_MESSAGE);  
             }
             else if(playerNumber.equals("0"))
             {
-               final JPanel panel = new JPanel();
                JOptionPane.showMessageDialog(panel, "The Player Number cannot be empty","Error", JOptionPane.ERROR_MESSAGE); 
             }
+            
+            
+          //System sends data via class PlayersSquadFileAdapter object=adapterPlayers and it's method changePlayer() and then clears the form fields and boxes
             else
             {
-            adapterPlayers.changePlayer(playerName, playerNumber, playerPosition, ifInjured, ifIsSuspended,ForHowManyDays);
-            updatePlayerBox();
+               adapterPlayers.changePlayer(playerName, playerNumber, playerPosition, ifInjured, ifIsSuspended,ForHowManyDays);
+               JOptionPane.showMessageDialog(panel, "The Player has been updated","Confirmation", JOptionPane.INFORMATION_MESSAGE); 
+               PlayerName.setText("");
+               PlayerNumber.setText("");
+               PlayerPosition.setText("");
+               SuspendedForHowManyMatches.setText("");
+               ifInjuredNo.setSelected(true);
+               ifSuspended.setSelected(false);
+               updatePlayerBox();
             }    
          }
          
          
-      else if(e.getSource() == playerBox) //when selecting Player from combobox 
-         {
+        
+        
+      else if(e.getSource() == playerBox) //when selecting Player from combobox on Edit Player tab
+      {
             
-         String temp = playerBox.getSelectionModel().getSelectedItem();
-         Player playerTemp= new Player("tempName",10000001,"tempPosition");
+         String temp = playerBox.getSelectionModel().getSelectedItem(); //takes currently picked value of combobox
+         Player playerTemp= new Player("tempName",10000001,"tempPosition");//creates temporary Player
             
-         ListOfPlayers players = adapterPlayers.getAllPlayers();
+         ListOfPlayers players = adapterPlayers.getAllPlayers();//takes all existing players
          for(int i=0; i<players.size();i++)
          {
             if(players.get(i).getName().equals(temp))
             {
-               playerTemp=players.get(i);
+               playerTemp=players.get(i); //and compares them to selected player in combobox
             }
          }
             
-         if (temp != null)
+         if (temp != null) //if player is selected in combobox, then his values are shown in the GUI 
             {
                PlayerName.setText(playerTemp.getName());
                String toStringPlayerNumber = Integer.toString(playerTemp.getNumber());
@@ -235,30 +278,30 @@ public class Controller
                PlayerPosition.setText(playerTemp.getPosition());
                String toStringSuspended = Integer.toString(playerTemp.getSuspendedForMatches());
                SuspendedForHowManyMatches.setText(toStringSuspended);
-            if(playerTemp.getIfInjured()==true)
+               if(playerTemp.getIfInjured()==true)
+                        {
+                        ifInjuredYes.setSelected(true);
+                        }
+               else if(playerTemp.getIfInjured()==false)
+                        {
+                        ifInjuredNo.setSelected(true);
+                        }
+               if(playerTemp.getIfSuspended()==true)
                      {
-                     ifInjuredYes.setSelected(true);
+                        ifSuspended.setSelected(true);
                      }
-            else if(playerTemp.getIfInjured()==false)
+               else if(playerTemp.getIfSuspended()==false)
                      {
-                     ifInjuredNo.setSelected(true);
+                        ifSuspended.setSelected(false);
                      }
-            if(playerTemp.getIfSuspended()==true)
-                  {
-                     ifSuspended.setSelected(true);
-                  }
-            else if(playerTemp.getIfSuspended()==false)
-                  {
-                     ifSuspended.setSelected(false);
-                  }
             }
          }
          
          
-         else if(e.getSource() == deletePlayer)  //when deleting selecting Player from combobox 
+         else if(e.getSource() == deletePlayer)  //when deleting selecting Player from combobox and clicking on DeletePlayer button on EditPlayer tab
          {
             int input = JOptionPane.showConfirmDialog(null,"Do you really want to delete the selected player?","Select", JOptionPane.YES_NO_OPTION);
-            if(input==0)
+            if(input==0)//if the dialog is confirmed, player is deleted and form fields are cleared
                {
                 String playerName = PlayerName.getText();  
                 adapterPlayers.deletePlayer(playerName);     
@@ -272,121 +315,117 @@ public class Controller
                }
          }
          
-         else if (e.getSource() == createNewPlayer)//when creating new Player 
+        
+        
+         else if (e.getSource() == createNewPlayer)//when clicking on CreateNewPlayer on CreatePlayer tab
          {
+          //form field values are assigned to variables
             String createPlName = createPlayerName.getText(); 
             String createPlPosition = createPlayerPosition.getText();
             String createPlNumber = createPlayerNumber.getText();
                   if(createPlNumber.equals(""))
                   {
-                  createPlNumber="0";
+                  createPlNumber="0";//so NullPointer exception would not appear
                   }
+                  
+                //checks if values in form fields are valid
                   if(adapterPlayers.comparePlayerNumber(createPlNumber, createPlName)==true)
                   {
-                     final JPanel panel = new JPanel();
                      JOptionPane.showMessageDialog(panel, "The Player Number has been already assigned to another player","Error", JOptionPane.ERROR_MESSAGE); 
                   }
 
                   else if(createPlName.equals(""))
                   {
-                     final JPanel panel = new JPanel();
-                     JOptionPane.showMessageDialog(panel, "The Player Name cannot be empty","Error", JOptionPane.ERROR_MESSAGE); 
-                  }
+                     JOptionPane.showMessageDialog(panel, "The Player Name cannot be empty","Error", JOptionPane.ERROR_MESSAGE);  
+                  } 
                   else if(createPlNumber.equals("0"))
                   {
-                     final JPanel panel = new JPanel();
                      JOptionPane.showMessageDialog(panel, "The Player Number cannot be empty","Error", JOptionPane.ERROR_MESSAGE); 
                   }
                   else if(createPlPosition.equals(""))
                   {
-                     final JPanel panel = new JPanel();
                      JOptionPane.showMessageDialog(panel, "The Player Position cannot be empty","Error", JOptionPane.ERROR_MESSAGE); 
                   }
                  
+                //System sends data via class PlayersSquadFileAdapter object=adapterPlayers and it's method createNewPlayer(), shows confirmation message and then clears the form fields
                   else
                   {
-                  final JPanel panel = new JPanel();
-                  adapterPlayers.createNewPlayer(createPlName, createPlNumber, createPlPosition);
-                  JOptionPane.showMessageDialog(panel, "The Player has been created","Confirmation", JOptionPane.INFORMATION_MESSAGE); 
-      
+                     adapterPlayers.createNewPlayer(createPlName, createPlNumber, createPlPosition);
+                     JOptionPane.showMessageDialog(panel, "The Player has been created","Confirmation", JOptionPane.INFORMATION_MESSAGE); 
+                     createPlayerName.setText("");
+                     createPlayerNumber.setText("");
+                     createPlayerPosition.setText("");
                   } 
             } 
         
         
         
-         else if (e.getSource() == createNewSquad)//when creating new Squad
+         else if (e.getSource() == createNewSquad)//when clicking on CreateNewSquad button on CreateSquad tab
          {
+            //form field values are assigned to variables
+            
             String createSqMatchDate = createSquadDate.getText(); 
             String createSqmatchTime = createSquadTime.getText();
             String createSqMatchOpponent = createSquadOpponent.getText();
             String createSqMatchIndex= createSquadIndex.getText();
-            String createSqTypeMatch = squadBox.getValue();
-                  if(squadBox.getValue()==null)
+            String createSqTypeMatch = typeOfMatchBox.getValue();
+            int fieldPlayers=tempSquad.getFieldPlayers();
+            int benchPlayers=tempSquad.getBenchPlayers();
+                  if(typeOfMatchBox.getValue()==null)
                   {
-                     createSqTypeMatch="";
+                     createSqTypeMatch=""; //to avoid Null pointer exception
                   }
             
-                  if(createSqMatchDate.equals(""))
+                  //checks if form field data are valid
+                  else if(createSqMatchDate.equals(""))
                   {
-                     final JPanel panel = new JPanel();
                      JOptionPane.showMessageDialog(panel, "The Match Date cannot be empty","Error", JOptionPane.ERROR_MESSAGE);
                   }
-                  if(createSqmatchTime.equals(""))
+                  else if(createSqmatchTime.equals(""))
                   {
-                     final JPanel panel = new JPanel();
                      JOptionPane.showMessageDialog(panel, "The Match Time cannot be empty","Error", JOptionPane.ERROR_MESSAGE); 
                   }
 
-                  if(createSqMatchOpponent.equals(""))
+                  else if(createSqMatchOpponent.equals(""))
                   {
-                     final JPanel panel = new JPanel();
                      JOptionPane.showMessageDialog(panel, "The Match opponent cannot be empty","Error", JOptionPane.ERROR_MESSAGE); 
                   }
-                  if(createSqMatchIndex.equals(""))
+                  else if(createSqMatchIndex.equals(""))
                   {
-                     final JPanel panel = new JPanel();
                      JOptionPane.showMessageDialog(panel, "The Match Number cannot be empty","Error", JOptionPane.ERROR_MESSAGE); 
                   }
-                  if(createSqTypeMatch.equals(""))
+                  else if(createSqTypeMatch.equals(""))
                   {
-                     final JPanel panel = new JPanel();
                      JOptionPane.showMessageDialog(panel, "The Match Type cannot be empty","Error", JOptionPane.ERROR_MESSAGE); 
                   }
+                  
+                  //System sends data via class PlayersSquadFileAdapter object=adapterSquads and it's method createNewSquad(), shows confirmation message
+                  
                   else
                   {
-                     final JPanel panel = new JPanel();
-                     adapterSquads.createNewSquad(createSqMatchDate, createSqmatchTime, createSqMatchOpponent,createSqMatchIndex,createSqTypeMatch);
+                     adapterSquads.createNewSquad(createSqMatchDate, createSqmatchTime, createSqMatchOpponent,createSqMatchIndex,createSqTypeMatch,fieldPlayers,benchPlayers);
                      JOptionPane.showMessageDialog(panel, "The Squad has been created","Confirmation", JOptionPane.INFORMATION_MESSAGE); 
                   } 
          }     
                   
                   
-                  
-                  
-                  
-                  
-                  
-                  
-                  
-                  
-                  
-                  
-                  
-        else if(e.getSource() == playerToSquadBox) //when add Player from combobox to Squad
+                
+        else if(e.getSource() == playerToSquadBox) //when add players from AddPlayer combobox to Squad on CreateSquad tab
                {
                      
-                  String temp = playerToSquadBox.getSelectionModel().getSelectedItem();
-                  Player playerTemp= new Player("tempName",10000001,"tempPosition");
-                  ListOfPlayers players = adapterPlayers.getAllPlayers();
+                  String temp = playerToSquadBox.getSelectionModel().getSelectedItem();//takes currently picked value of combobox
+                  Player playerTemp= new Player("tempName",10000001,"tempPosition");//creates temporary Player
+                  ListOfPlayers players = adapterPlayers.getAllPlayers(); //gets all existing players
                   
                   
+                //takes form fields values and assign them to temporary Squad 
                   tempSquad.setIndex(Integer.parseInt(createSquadIndex.getText()));
                   tempSquad.setDate(createSquadDate.getText());
                   tempSquad.setTime(createSquadTime.getText());
                   tempSquad.setOpponent(createSquadOpponent.getText());
-                  tempSquad.setMatchType(squadBox.getValue());
+                  tempSquad.setMatchType(typeOfMatchBox.getValue());
                   
-                  if(squadBox.getValue()==null)
+                  if(typeOfMatchBox.getValue()==null)  //checks that typeOfMatch has been selected 
                   {
                    
                      final JPanel panel = new JPanel();
@@ -394,14 +433,14 @@ public class Controller
                    
                   }
                 
-                  else 
+                  else //if player has been selected in combobox, then confirmation message is shown
                   {
                 
                     if (temp != null)
                      {  
                         int input = JOptionPane.showConfirmDialog(null,"Do you really want to add player to the squad?","Select", JOptionPane.YES_NO_OPTION);
                         
-                        for(int i=0; i<players.size();i++)
+                        for(int i=0; i<players.size();i++) //checks for all existing players and if there is a name match, assigns it to temporary player
                            {
                            if(players.get(i).getName().contains(temp))
                            {
@@ -412,37 +451,43 @@ public class Controller
                            
                         
                      
-                        if(input==0)
+                        if(input==0) //if confirmation message has been answered=YES
                            {
                            
-                           if(allPlayersSquadArea.getText().contains(playerTemp.getName()))
+                           if(allFieldPlayersSquadArea.getText().contains(playerTemp.getName())) //if player is already assigned to the squad
                               {
-                                 final JPanel panel = new JPanel();
                                  JOptionPane.showMessageDialog(panel, "The Player is already on the list","Error", JOptionPane.ERROR_MESSAGE); 
       
                               }
-                           else if(playerTemp.getIfSuspended()==true)
+                           else if(playerTemp.getIfSuspended()==true) //if player is suspended
                               {
-                              final JPanel panel = new JPanel();
-                              JOptionPane.showMessageDialog(panel, "The Player is Suspended","Error", JOptionPane.ERROR_MESSAGE);  
+                              JOptionPane.showMessageDialog(panel, "The Player is Suspended","Error", JOptionPane.ERROR_MESSAGE);
+                            
                               }
                            
+                           else if(tempSquad.isTeamFull()==true) //if squad is already full
+                           {
+                              tempSquad.setIsSquadFull(true);  
+                              JOptionPane.showMessageDialog(panel, "Too many players","Error", JOptionPane.ERROR_MESSAGE);  
+                           }
                            
-                           else if(tempSquad.addPlayers(playerTemp)==false)
+                           else if(tempSquad.isTeamFull()==false)//if squad is not full, chosen player from combobox is assigned to either field players
                          
                               {
-                              tempSquad.addPlayers(playerTemp);
-                              allPlayersSquadArea.appendText(playerTemp.toString()+"\n"); 
-                             
-                              }
-                           else if(tempSquad.addPlayers(playerTemp)==true)
-                              {
-                                 final JPanel panel = new JPanel();
-                                 JOptionPane.showMessageDialog(panel, "Too many players","Error", JOptionPane.ERROR_MESSAGE);  
+                              if(tempSquad.getFieldPlayers()<=10 && tempSquad.getBenchPlayers()==0)
+                                 {
+                                 tempSquad.addPlayers(playerTemp);
+                                 allFieldPlayersSquadArea.appendText(playerTemp.toString()+"\n");
                                
-                              }
-                           System.out.print(tempSquad.toString());
-                        
+                                 }
+                              else//or to bench players
+                             
+                                 {
+                                    tempSquad.addPlayers(playerTemp);
+                                    allBenchPlayersSquadArea.appendText(playerTemp.toString()+"\n");
+                                 }
+                             }
+
                           }
                      
                        }
@@ -450,24 +495,7 @@ public class Controller
                }
              
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
          else if (e.getSource() == close)  //when closing the application from MenuBar 
          {
             int input = JOptionPane.showConfirmDialog(null,"Do you really want to exit?","Select", JOptionPane.YES_NO_OPTION);
@@ -478,9 +506,6 @@ public class Controller
             }
          }
 
-      
-
- 
    }
 
 }

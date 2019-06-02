@@ -32,7 +32,7 @@
                         </AnchorPane>
                     </content>
                   </Tab>
-  		<Tab fx:id="createPlayerTab" text="Create Player">
+  		<Tab fx:id="createPlayerTab" onSelectionChanged="#MyTabListener" text="Create Player">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
@@ -90,14 +90,17 @@
                               <Label layoutX="55.0" layoutY="83.0" text="Date of Match" />
                               <Label layoutX="55.0" layoutY="123.0" text="Time of Match" />
                               <Label layoutX="47.0" layoutY="168.0" text="Opponent Name" />
-                              <ComboBox fx:id="squadBox" layoutX="44.0" layoutY="221.0" onAction="#MyActionListener" prefWidth="150.0" promptText="Type of Match" />
+                              <ComboBox fx:id="typeOfMatchBox" layoutX="44.0" layoutY="221.0" onAction="#MyActionListener" prefWidth="150.0" promptText="Type of Match" />
                               <TextField fx:id="createSquadTime" layoutX="182.0" layoutY="118.0" />
                               <TextField fx:id="createSquadOpponent" layoutX="182.0" layoutY="163.0" />
-                              <Button fx:id="createNewSquad" layoutX="377.0" layoutY="439.0" mnemonicParsing="false" onAction="#MyActionListener" text="CreateNewSquad" />
-                              <TextField fx:id="createSquadIndex" layoutX="182.0" layoutY="33.0" />
+                              <Button fx:id="createNewSquad" layoutX="378.0" layoutY="456.0" mnemonicParsing="false" onAction="#MyActionListener" text="CreateNewSquad" />
+                              <TextField fx:id="createSquadIndex" layoutX="182.0" layoutY="33.0" promptText="MUST BE A NUMBER" />
                               <Label layoutX="44.0" layoutY="38.0" text="Number of Match" />
                               <ComboBox fx:id="playerToSquadBox" layoutX="463.0" layoutY="18.0" onAction="#MyActionListener" prefWidth="150.0" promptText="AddPlayer" />
-                              <TextArea fx:id="allPlayersSquadArea" layoutX="430.0" layoutY="68.0" prefHeight="329.0" prefWidth="436.0" promptText="SET VALUES TO ALL FIELDS ON THE LEFT SIDE FIRST, PLEASE, THEN START ADDING PLAYERS" />
+                              <TextArea fx:id="allFieldPlayersSquadArea" layoutX="463.0" layoutY="101.0" prefHeight="186.0" prefWidth="406.0" promptText="SET VALUES TO ALL FIELDS ON THE LEFT SIDE FIRST, PLEASE, THEN START ADDING PLAYERS" />
+                              <Label layoutX="463.0" layoutY="68.0" text="Field Players" />
+                              <Label layoutX="463.0" layoutY="303.0" text="Bench" />
+                              <TextArea fx:id="allBenchPlayersSquadArea" layoutX="464.0" layoutY="324.0" prefHeight="120.0" prefWidth="407.0" promptText="SET VALUES TO ALL FIELDS ON THE LEFT SIDE FIRST, PLEASE, THEN START ADDING PLAYERS" />
                            </children>
                         </AnchorPane>
                     </content>

@@ -20,12 +20,13 @@ public class Squad implements Serializable
    private String opponent;
    private int fieldPlayers;
    private int benchPlayers;
+   private boolean isSquadFull;
    private ArrayList<Player> players;
    
    
    /**
-    * Five-argument constructor + 2 integer attributes fieldPlayers and benchPlayers are set as 0 by default
-    * +empty arraylist players (list of players) 
+    * Five-argument constructor + 2 integer attributes fieldPlayers and benchPlayers
+    * +empty ArrayList players (list of players) 
     * @param integer index sets the Squads's number
     * @param String date sets the date of match when the Squad is supposed to play
     * @param String time sets the time of match when the Squad is supposed to play
@@ -34,68 +35,119 @@ public class Squad implements Serializable
     * @author Vaclav Dvorak
     * @version 1.0
     */
-   public Squad(int index, String date, String time, String matchType, String opponent)
+   public Squad(int index, String date, String time, String matchType, String opponent, 
+         int fieldPlayers,int benchPlayers)
    {
       this.index=index;
       this.date=date;
       this.time=time;
       this.matchType=matchType;
       this.opponent=opponent;
-      this.fieldPlayers=0;
-      this.benchPlayers=0;
+      this.fieldPlayers=fieldPlayers;
+      this.benchPlayers=benchPlayers;
+      this.isSquadFull=false;
       players=new ArrayList<Player>(); 
    }
    
    
    /**
-    * adds Player to arraylist and adds one to total number of fieldPlayers or benchPlayers based on matchType 
+    * adds Player to ArrayList and adds one to total number of fieldPlayers or benchPlayers 
+    * based on matchType and if the team player limit has been fulfilled, then sets isSquadFull=true
     * @param Player player
     * @author Vaclav Dvorak
     * @version 1.0
     */
-   public boolean addPlayers(Player player)
+   public void addPlayers(Player player)
    {
-      if(matchType.equals("league") && benchPlayers<=4 && fieldPlayers<=11)
+      if(fieldPlayers!=11 && fieldPlayers<=11)
       {
          players.add(player);
          fieldPlayers++;
-         return false;
+
       }
       else if(matchType.equals("league") && benchPlayers<=4)
       {
          players.add(player);
          benchPlayers++;
-         return false;
+
       }
-      else if(matchType.equals("cup") || matchType.equals("friendly") && benchPlayers<=5 && fieldPlayers<=11)
-      {
-         players.add(player);
-         fieldPlayers++;
-         return false;
-      }
-      else if(matchType.equals("cup") || matchType.equals("friendly") && benchPlayers<=11)
+      else if(matchType.equals("cup") && benchPlayers<=5)
       {
          players.add(player);
          benchPlayers++;
-         return false;
+     
+      }
+      else if(matchType.equals("friendly") && benchPlayers<=11)
+      {
+         players.add(player);
+         benchPlayers++;
+     
       }  
       else 
          {
-         return true;
+         isSquadFull=true;
          }
    }
    
    
    /**
-    * Sets the Squad's index.
-    * @param integer index representing if the Squad's number
+    * Checks if the Squad's does not exceed specific number of players and sets Squad's 
+    * isSquadFull attribute appropriately; 
+    * @return boolean 
     * @author Vaclav Dvorak
     * @version 1.0
     */
-     public void setIndex(int index)
+   public boolean isTeamFull()
+   {
+      if(matchType.equals("league") && benchPlayers<=3)
       {
-         this.index=index;  
+        
+         return false;
+       
       }
+     
+      else if(matchType.equals("cup") && benchPlayers<=4)
+      {
+     
+         return false;
+      }
+     
+      else if(matchType.equals("friendly") && benchPlayers<=10)
+      {
+         return false;
+      }
+          
+       else 
+      {
+        return true;
+      }
+     }
+   
+   /**
+    * Checks if the Squad's does not exceed specific number of players
+    * @return boolean 
+    * @author Vaclav Dvorak
+    * @version 1.0
+    */
+   public void setIndex(int index)
+   {
+      this.index=index;  
+   }
+   
+   
+   
+   /**
+    * sets the Squad's isSquadFull attribute
+    * @param boolean 
+    * @author Vaclav Dvorak
+    * @version 1.0
+    */
+   public void setIsSquadFull(boolean isSquadFull)
+   {
+      this.isSquadFull=isSquadFull;  
+   }
+   
+ 
      
      
      /**
@@ -195,6 +247,19 @@ public class Squad implements Serializable
      {
         return opponent;
      }
+     
+     
+     /**
+      * Gets the Squad's matchType
+      * @return String matchType representing matchType of the Squad
+      * @author Vaclav Dvorak
+      * @version 1.0
+      */
+     public String getMatchType()
+     {
+        return matchType;
+     }
+     
      
      
      /**

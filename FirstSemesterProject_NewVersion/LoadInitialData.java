@@ -38,7 +38,9 @@ public class LoadInitialData
               String time = tempArr[2];
               String matchType = tempArr[3];
               String opponent = tempArr[4];
-              squads.addSquad(new Squad(index, date, time, matchType, opponent));
+              int fieldPlayers = Integer.parseInt(tempArr[0]);
+              int benchPlayers = Integer.parseInt(tempArr[0]);
+              squads.addSquad(new Squad(index, date, time, matchType, opponent,fieldPlayers,benchPlayers));
             }
             
             
