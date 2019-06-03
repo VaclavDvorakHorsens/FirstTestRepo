@@ -10,7 +10,7 @@ import java.io.ObjectOutputStream;
 
 /**
  * writes and reads data(objects) from/to  squad and player .bin files 
- * @author Vaclav Dvorak
+ * @author Vaclav Dvorak (based on a Allan Henriksen's code)
  * @version 1.0
  */
 
@@ -62,7 +62,7 @@ public class MyFileIO
        * @throws IOException in case the reading from the file failed
        * @throws ClassNotFoundException in case the end of the file has been reached unexpectedly
        * @throws FileNotFoundException in case the file is not found
-       * @author Vaclav Dvorak
+       * @author Vaclav Dvorak (based on a Allan Henriksen's code)
        * @version 1.0
        */
       public Object readObjectFromFile(String fileName) throws IOException, FileNotFoundException, ClassNotFoundException

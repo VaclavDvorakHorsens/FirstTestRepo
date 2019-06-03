@@ -198,6 +198,16 @@ public class Squad implements Serializable
      }
      
      
+     /**
+      * Sets the Squad's ArrayList players of type Player.
+      * @param ArrayList players
+      * @author Vaclav Dvorak
+      * @version 1.0
+      */
+     public void setSquad(ArrayList<Player> players)
+     {
+        this.players=players;  
+     }
      
      
      /**
@@ -289,6 +299,91 @@ public class Squad implements Serializable
      
      
      /**
+      * Gets the Squad's players in the field
+      * @return String squadPlayers in the field, which is ArrayList players of type Player converted into String
+      * @author Vaclav Dvorak
+      * @version 1.0
+      */ 
+    public String getSquadFieldPlayerstoString()
+     {
+       String squadPlayers="";
+       
+       for(int i=0;i<fieldPlayers;i++)
+       {
+          squadPlayers+=players.get(i).toString() + "\n";
+          System.out.print(squadPlayers);
+       }
+        return squadPlayers;
+        
+     }
+     
+    /**
+     * Gets the Squad's players on the bench
+     * @return String squadPlayers on the bench, which is ArrayList players of type Player converted into String
+     * @author Vaclav Dvorak
+     * @version 1.0
+     */ 
+   public String getSquadBenchPlayerstoString()
+    {
+      String squadPlayers="";
+      
+      for(int i=0;i<benchPlayers;i++)
+      {
+         squadPlayers+=players.get(i).toString() + "\n";
+         System.out.print(squadPlayers);
+      }
+       return squadPlayers;
+       
+    }
+    
+    
+    /**
+     * Gets the Squad's players
+     * @return ArrayList squadPlayers of type Player
+     * @author Vaclav Dvorak
+     * @version 1.0
+     */ 
+   public ArrayList<Player> getAllSquadPlayers()
+    {
+      ArrayList<Player> squadPlayers= new ArrayList<Player>();
+      for(int i=0;i<players.size();i++)
+      {
+         squadPlayers.add(players.get(i));
+       
+      }
+       return squadPlayers;
+       
+    }
+    
+    
+   /**
+    * Deletes the Squad's field player
+    * @param Player
+    * @author Vaclav Dvorak
+    * @version 1.0
+    */ 
+  public void deleteSquadFieldPlayers(Player player)
+  {
+      players.remove(player);
+      fieldPlayers--;
+   }
+    
+  /**
+   * Deletes the Squad's bench player
+   * @param Player
+   * @author Vaclav Dvorak
+   * @version 1.0
+   */ 
+ public void deleteSquadBenchPlayers(Player player)
+ {
+     players.remove(player);
+     benchPlayers--;
+  }
+  
+    
+    
+    
+     /**
       * returns a string representation of Squad
       * @return Squad's attributes converted to String: date, time, opponent, matchType, fieldPlayers, benchPlayers
       * @return and players 
@@ -297,12 +392,12 @@ public class Squad implements Serializable
       */
      public String toString()
      {
-        String SquadList=date+ " " +time+ " " +opponent+ " "+matchType+" "+"FieldPlayers: " +fieldPlayers+ " "+"BenchPlayers: " +benchPlayers+"\n";
-        for(int i=0;i<players.size();i++)
+        String SquadList="Number: "+ index+", Date and Time: " +date+ " " +time+  ", Opponent: " +opponent+ ", MatchType: "+matchType+" "+", FieldPlayers: " +fieldPlayers+ " "+", BenchPlayers: " +benchPlayers+"\n";
+    /*    for(int i=0;i<players.size();i++)
         {
            SquadList+=players.get(i).toString();
            SquadList+= "\n";
-        }
+        }*/
         return SquadList;
      }
   

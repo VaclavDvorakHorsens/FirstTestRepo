@@ -31,7 +31,7 @@ public class Main extends Application
 		  FXMLLoader loader = new FXMLLoader();
 		  loader.setLocation(getClass().getResource("Sample.fxml"));
 		   
-			Scene scene = new Scene(loader.load(),1000,600);
+			Scene scene = new Scene(loader.load(),1000,700);
 			
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
@@ -55,6 +55,7 @@ public class Main extends Application
 	   public static void main(String[] args) 
 	   {
 	      launch(args);
+	      
 	   }
 
 	   

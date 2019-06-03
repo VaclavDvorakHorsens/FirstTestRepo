@@ -1,6 +1,7 @@
 package application;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * adapter class, that calls creating/editing methods on squads and players and saves them changed
@@ -92,7 +93,7 @@ public class PlayersSquadFileAdapter
    /**
     * Sends ListOfPlayers into object of MyFileIO class (which eventually ends with saving the ListOfPlayers)
     * @param receives players (object including ArrayList with players)
-    * @author Vaclav Dvorak
+    * @author Alejandra Leticia
     * @version 1.0
     */
    public void savePlayers(ListOfPlayers players)
@@ -115,7 +116,7 @@ public class PlayersSquadFileAdapter
    /**
     * Sends ListOfSquadsinto object of MyFileIO class (which eventually ends with saving the ListOfSquads)
     * @param receives players (object including ArrayList with squads)
-    * @author Vaclav Dvorak
+    * @author Ramanpreet Singh
     * @version 1.0
     */
    public void saveSquads(ListOfSquads squads)
@@ -199,6 +200,67 @@ public class PlayersSquadFileAdapter
  
    
    /**
+    * changes Squad's attributes based on it's SquadIndex
+    * @param receives Squad's: String SquadIndex, String SquadDate, String SquadTime, String SquadOpponent, String SquadMatchType
+    * @author Ramanpreet Singh
+    * @version 1.0
+    */
+   
+   public void changeSquads(String SquadIndex, String SquadDate, String SquadTime, String SquadOpponent, String SquadMatchType)
+   {
+      ListOfSquads squads = getAllSquads();
+
+      for (int i = 0; i < squads.size(); i++)
+      {
+         Squad squad = squads.get(i);
+         int intSquadIndex = Integer.parseInt(SquadIndex);
+         
+        
+         
+         if(squad.getIndex()==intSquadIndex)
+         {
+            squad.setDate(SquadDate);
+            squad.setTime(SquadTime);
+            squad.setOpponent(SquadOpponent);
+            squad.setMatchType(SquadMatchType);
+         }  
+      }
+      saveSquads(squads);
+   }
+   
+   /**
+    * compares Player's attribute Number in ListOfPlayers and if there is some other Player
+    * with the same number then return this information
+    * @param receives Player's Number and Name
+    * @param returns False, if there is no other player with the same number and returns
+    * @param True, if there is already a Player with the same Number
+    * @author Jose Alejandro
+    * @version 1.0
+    */
+   public boolean compareSquadNumber(String createSqMatchIndex)
+   {
+      ListOfSquads squads = getAllSquads();
+     
+      for (int i=0; i<squads.size();i++)    
+      { 
+         Squad squad = squads.get(i);
+         int sqNumber = Integer.parseInt(createSqMatchIndex);
+         if(squad.getIndex()==sqNumber)
+         {
+           return true;
+         }
+         else
+         {
+            return false;
+         }
+      } 
+      return false;
+   }
+   
+   
+   
+   
+   /**
     * deletes Player in ListOfPlayers and then saves ListOfPlayers without the deleted Player
     * @param receives Player's Name based on which search for all the Players and removes the 
     * @param player when there is a match  
@@ -225,7 +287,7 @@ public class PlayersSquadFileAdapter
    /**
     * creates a new Player in ListOfPlayers and then saves ListOfPlayers
     * @param receives Player's: Name, Number, Position 
-    * @author Vaclav Dvorak
+    * @author Alejandra Leticia
     * @version 1.0
     */
    public void createNewPlayer(String createPlName, String createPlNumber, String createPlPosition)
@@ -243,15 +305,16 @@ public class PlayersSquadFileAdapter
    /**
     * creates a new Player in ListOfPlayers and then saves ListOfPlayers
     * @param receives Player's: Name, Number, Position 
-    * @author Vaclav Dvorak
+    * @author Jose Alejandro
     * @version 1.0
     */
-   public void createNewSquad(String createSqMatchDate, String createSqmatchTime, String createSqMatchOpponent, String createSqMatchIndex,String createSqTypeMatch, int fieldPlayers, int benchPlayers)
+   public void createNewSquad(String createSqMatchDate, String createSqmatchTime, String createSqMatchOpponent, String createSqMatchIndex,String createSqTypeMatch, int fieldPlayers, int benchPlayers, ArrayList<Player> squadPlayers)
    {
       ListOfSquads squads = getAllSquads();
       int intSquadindex = Integer.parseInt(createSqMatchIndex);
       
-      Squad newSquad = new Squad(intSquadindex, createSqMatchDate, createSqmatchTime, createSqMatchOpponent,createSqTypeMatch,fieldPlayers,benchPlayers);
+      Squad newSquad = new Squad(intSquadindex, createSqMatchDate, createSqmatchTime,createSqTypeMatch,createSqMatchOpponent,fieldPlayers,benchPlayers);
+      newSquad.setSquad(squadPlayers);
       squads.addSquad(newSquad);
       saveSquads(squads);
    }

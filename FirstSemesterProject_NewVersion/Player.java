@@ -221,7 +221,7 @@ public boolean numberEquals(Object obj)
  */
 public String toString()
 {
-   return "Name:" +name + ", " +"Number: " + number + ",  "+ "Position: " + position+",  "+"Suspended: "+ " " + ifSuspended + ", "+"ForHowManyMatches: " + suspendedForMatches + ",  "+"Injured: " + ifInjured;
+   return "Name:" +name + ", " +"Number: " + number + ",  "+ "Position: " + position+",  "+"Suspended: "+ " " + ifSuspended + ", "+"ForHowManyMatches: " + suspendedForMatches + ",  "+"Injured: " + ifInjured+"\n";
 }
 
 

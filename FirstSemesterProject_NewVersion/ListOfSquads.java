@@ -47,6 +47,32 @@ public class ListOfSquads implements Serializable
       }
    
       
+      
+      
+      
+      /**
+       * returns specific Squad based on index
+       * @param receives integer index
+       * @return based on which returns specific Squad from ArrayList squads
+       * @author Vaclav Dvorak
+       * @version 1.0
+       */
+      public Squad get(int index)
+      {
+         if(index<squads.size())
+         {
+            return squads.get(index);
+         }
+         else
+         {
+            return null;
+         }
+      }
+      
+      
+      
+      
+      
       /**
        * returns all squads
        * @return all squads in ArrayList squads of type Squad
@@ -63,7 +89,7 @@ public class ListOfSquads implements Serializable
       /**
        * adds Squad to ArrayList squads
        * @param receives Squad squad to add to the ArrayList
-       * @author Vaclav Dvorak
+       * @author Jose Alejandro
        * @version 1.0
        */
       public void addSquad(Squad squad)
@@ -72,6 +98,18 @@ public class ListOfSquads implements Serializable
       }
       
 
+      /**
+       * returns a size of ArrayList squads
+       * @return size of ArrayList squads
+       * @author Vaclav Dvorak
+       * @version 1.0
+       */
+      public int size()
+      {
+         return squads.size();
+      }
+      
+      
       
       /**
        * returns a string representation of ListOfSquads
